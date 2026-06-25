@@ -56,8 +56,8 @@ if [ -z "$frag" ]; then
   frag=$(printf '%s' "$scan" | grep -oE 'your (call|move)([,.?!:]|$)' 2>/dev/null | head -1)
 fi
 
-# option-menu closer: a standalone cue + >=2 list items
-if [ -z "$frag" ] && printf '%s' "$scan" | grep -Eq 'choose one|pick one|which option|needs? your (decision|input|call)'; then
+# option-menu closer: a clause-boundary cue (so "pick one X" prose doesn't trip it) + >=2 list items
+if [ -z "$frag" ] && printf '%s' "$scan" | grep -Eq '(choose|pick) one([,.?!:]|$)|which option|needs? your (decision|input|call)'; then
   items=$(printf '%s\n' "$clean" | grep -cE '^[[:space:]]*([0-9]+[.)]|[-*])[[:space:]]')
   [ "${items:-0}" -ge 2 ] && frag="option-menu handoff"
 fi
